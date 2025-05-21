@@ -12,8 +12,8 @@ int	ft_strlen(const char *s)
 	const char *q;
 
 	q = s;
-	while(*q++)
-		;
+	while(*(q) != '\0')
+		q++;
 	return (q - s);
 }
 
@@ -57,7 +57,7 @@ int	main(void)
 	{
 		if(ifa->ifa_addr == NULL)
 			continue;
-		if(strcmp(ifa->ifa_name, "lo") == 0)
+		if(ft_strcmp(ifa->ifa_name, "lo") == 0)
 			continue;
 		family = ifa->ifa_addr->sa_family;
 
