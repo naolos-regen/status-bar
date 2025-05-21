@@ -52,11 +52,10 @@ char	*getaddrs(void)
 			free(hosts);
 			return (NULL);
 		}
-		// TODO: Implement own strlen  & strcat
-		if (strlen(hosts) > 0) {
-			strcat(hosts, ",");
+		if (ft_strlen(hosts) > 0) {
+			ft_strcat(hosts, ",");
 		}
-		strcat(hosts, addr);
+		ft_strcat(hosts, addr);
 		ifa = ifa->ifa_next;
 	}
 	freeifaddrs(ifaddr);
@@ -69,7 +68,7 @@ int	main(void)
 
 	lol = getaddrs();
 	printf("%s", lol);
-
 	free(lol);
+
 	return (0);
 }
