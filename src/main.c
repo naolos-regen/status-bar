@@ -9,14 +9,6 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 
-/* TODO: probably needed check that
-		if (s != 0)
-		{
-			freeifaddrs(ifaddr);
-			free(hosts);
-			return (NULL);
-		}
-*/
 // TODO: create memset
 int	family_append_addr(struct ifaddrs *ifa, int *family, char *addr)
 {
