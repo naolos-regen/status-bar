@@ -9,54 +9,50 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 
-char	*getaddrs(void)
-{
-	struct ifaddrs	*ifaddr;
-	struct ifaddrs	*ifa;
-	char			*hosts;
-	int				family;
-	int				s;
-	char addr[NI_MAXHOST];
-
-	hosts = malloc(sizeof(char) * NI_MAXHOST * 10);
-	if (NULL == hosts)
-		return (NULL);
-	if (getifaddrs(&ifaddr) == -1)
-	{
-		free(hosts);
-		return (NULL);
-	}
-	ifa = ifaddr;
-	while (ifa != NULL)
-	{
-		if (ifa->ifa_addr == NULL)
-		{
-			ifa = ifa->ifa_next;
-			continue ;
-		}
-		family = ifa->ifa_addr->sa_family;
-		if (family == AF_INET)
-			s = getnameinfo(ifa->ifa_addr, sizeof(struct sockaddr_in), addr,
-					NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
-		else if (family == AF_INET6)
-			s = getnameinfo(ifa->ifa_addr, sizeof(struct sockaddr_in6), addr,
-					NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
-		else 
-		{
-			ifa = ifa->ifa_next;	
-			continue;
-		}
+/* TODO: probably needed check that
 		if (s != 0)
 		{
 			freeifaddrs(ifaddr);
 			free(hosts);
 			return (NULL);
 		}
-		if (ft_strlen(hosts) > 0) {
-			ft_strcat(hosts, ",");
+*/
+// TODO: create memset
+int	family_append_addr(struct ifaddrs *ifa, int *family, char *addr)
+{
+	memset(addr, 0, NI_MAXHOST);
+
+	if (ifa->ifa_addr == NULL)
+		return (-1);
+	*family = ifa->ifa_addr->sa_family;
+	if (*family == AF_INET)
+		return (getnameinfo(ifa->ifa_addr, sizeof(struct sockaddr_in), addr, NI_MAXHOST, NULL, 0, NI_NUMERICHOST));
+	else if (*family == AF_INET6)
+		return (getnameinfo(ifa->ifa_addr, sizeof(struct sockaddr_in6), addr, NI_MAXHOST, NULL, 0, NI_NUMERICHOST));
+	return (-1);
+}
+
+void	*straddrs(char **hosts)
+{
+	struct ifaddrs	*ifaddr;
+	int				family;
+	int				s;
+	char			addr[NI_MAXHOST];
+
+	if (getifaddrs(&ifaddr) == -1)
+		return (NULL);
+	while (ifaddr != NULL)
+	{
+		s = family_append_addr(ifaddr, &family, addr);
+		if(s != 0)	
+		{
+			ifaddr = ifaddr->ifa_next;
+			continue ;
 		}
-		ft_strcat(hosts, addr);
-		ifa = ifa->ifa_next;
+		if (ft_strlen(*hosts) > 0)
+			ft_strcat(*hosts, ",");
+		ft_strcat(*hosts, addr);
+		ifaddr = ifaddr->ifa_next;
 	}
 	freeifaddrs(ifaddr);
 	return (hosts);
@@ -64,11 +60,13 @@ char	*getaddrs(void)
 
 int	main(void)
 {
-	char	*lol;
+	char	*hosts;
 
-	lol = getaddrs();
-	printf("%s", lol);
-	free(lol);
-
+	hosts = malloc(sizeof(char) * NI_MAXHOST * 10);
+	if (NULL == hosts)
+		return (0);
+	straddrs(&hosts);
+	printf("%s", hosts);
+	free(hosts);
 	return (0);
 }
