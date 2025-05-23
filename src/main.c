@@ -56,8 +56,9 @@ int	main(void)
 
 	hosts = malloc(sizeof(char) * NI_MAXHOST * 10);
 	if (NULL == hosts)
-		return (0);
-	straddrs(&hosts);
+		return (-1);
+	if(straddrs(&hosts) == NULL)
+		return (-1);
 	printf("%s", hosts);
 	free(hosts);
 	return (0);
