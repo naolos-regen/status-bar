@@ -10,6 +10,12 @@
 #include <sys/types.h>
 
 // TODO: create memset
+/*
+*	RETURNS 
+*	0  on success
+*	-1 on fail
+*
+*/
 int	family_append_addr(struct ifaddrs *ifa, int *family, char *addr)
 {
 	memset(addr, 0, NI_MAXHOST);
