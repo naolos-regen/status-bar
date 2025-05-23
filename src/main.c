@@ -18,7 +18,7 @@
 */
 int	family_append_addr(struct ifaddrs *ifa, int *family, char *addr)
 {
-	ft_memset(addr, 0, NI_MAXHOST);
+	ft_memset_recursive(addr, 0, NI_MAXHOST);
 
 	if (ifa->ifa_addr == NULL)
 		return (-1);
