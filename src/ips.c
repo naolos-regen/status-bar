@@ -15,14 +15,15 @@ int	family_append_addr(struct ifaddrs *ifa, int *family, char *addr, char *statu
 	*family = ifa->ifa_addr->sa_family;
 	if (ifa->ifa_flags & IFF_LOOPBACK)
 		return (-1);
-	if (*family == AF_INET)
-		return (getnameinfo(ifa->ifa_addr, sizeof(struct sockaddr_in), addr, NI_MAXHOST, NULL, 0, NI_NUMERICHOST));
-	else if (*family == AF_INET6)
-		return (getnameinfo(ifa->ifa_addr, sizeof(struct sockaddr_in6), addr, NI_MAXHOST, NULL, 0, NI_NUMERICHOST));
 	if (ifa->ifa_flags & IFF_UP)
 		ft_strcpy(status, "UP");
 	else
 		ft_strcpy(status, "DOWN");
+	if (*family == AF_INET)
+		return (getnameinfo(ifa->ifa_addr, sizeof(struct sockaddr_in), addr, NI_MAXHOST, NULL, 0, NI_NUMERICHOST));
+	else if (*family == AF_INET6)
+		return (getnameinfo(ifa->ifa_addr, sizeof(struct sockaddr_in6), addr, NI_MAXHOST, NULL, 0, NI_NUMERICHOST));
+	
 	return (-1);
 }
 
